@@ -73,21 +73,21 @@ namespace B.Services
                     message.Severity = NotificationSeverity.Info;
                     message.Summary = "Directory creation:";
                     message.Detail = "Directory is already exists.";
+                    return Task.FromResult(message);
                 }
-
                 DirectoryInfo directoryInfo = Directory.CreateDirectory(path);
                 message.Severity = NotificationSeverity.Info;
                 message.Summary = "Directory creation:";
                 message.Detail = $"Directory {directoryInfo.Name} created";
+                return Task.FromResult(message);
             }
             catch(Exception ex) {
 
                 message.Severity = NotificationSeverity.Error;
                 message.Summary = "Can't create directory:";
                 message.Detail = ex.Message;
+                return Task.FromResult(message);
             }
-           
-            return Task.FromResult(message);
         }
         public Task<NotificationMessage> DeleteDirectory(string path)
         {
@@ -101,7 +101,6 @@ namespace B.Services
                     message.Severity = NotificationSeverity.Info;
                     message.Summary = "Directory delete:";
                     message.Detail = "Directory is deleted.";
-                 
                     return Task.FromResult(message);
                 }
                 message.Severity = NotificationSeverity.Info;
@@ -114,9 +113,8 @@ namespace B.Services
                 message.Severity = NotificationSeverity.Error;
                 message.Summary = "Can't delete directory:";
                 message.Detail = ex.Message;
+                return Task.FromResult(message);
             }
-            return Task.FromResult(message);
         }
-
     }
 }
