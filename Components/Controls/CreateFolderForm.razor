@@ -10,7 +10,8 @@
                 <RadzenTextBox Name="Name" @bind-Value=@directory.DirectoryName />
             </ChildContent>
             <Helper>
-                <RadzenRegexValidator Component="Name" Text="Enter valid directory name." Pattern="^[a-zA-Z0-9]+$" />
+                <RadzenRegexValidator Component="Name" Text="Enter valid directory name." Pattern="^\w+$" />
+                <RadzenRequiredValidator Text="Directory name is required" Component="Name" />
             </Helper>
         </RadzenFormField>
         <RadzenButton ButtonType="ButtonType.Submit" Text="Create"></RadzenButton>
