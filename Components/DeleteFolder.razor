@@ -1,0 +1,30 @@
+﻿@inject IFileSystemService FileSystemService
+@inject DialogService DialogService
+@inject NotificationService NotificationService
+@inject IUpdateComponentService UpdateComponentService
+
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Delete folder" Click="@(args => ConfirmDelete(directoryPath))" @onclick:stopPropagation="true" Disabled=@isDisabledDeleteButton></RadzenButton>
+</div>
+
+
+
+@code {
+    [Parameter] public bool isDisabledDeleteButton { get; set; }
+
+    [Parameter] public string directoryPath { get; set; }
+
+    async Task ConfirmDelete(string path)
+    {
+
+        var confirmationResult = await this.DialogService.Confirm("Are you sure?", $"Delete folder {directoryPath}", new ConfirmOptions { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (confirmationResult.HasValue && confirmationResult.Value)
+        {
+            NotificationMessage notificationMessage = await FileSystemService.DeleteDirectory(path);
+            NotificationService.Notify(notificationMessage);
+            UpdateComponentService.RequestUpdate();
+        }
+
+    }
+
+}

@@ -1,0 +1,81 @@
+@page "/"
+
+
+<PageTitle>File Explorer</PageTitle>
+
+<RadzenSplitter Orientation="Orientation.Vertical" style="height: 400px; border: 1px solid rgba(0,0,0,.08);">
+    <RadzenSplitterPane Size="100px">
+    <RadzenSplitter>
+        <RadzenSplitterPane Size="50%" Min="20%" Max="70%">
+            <FileSystem OnSelectValueChanged=@ContentHandler/>
+        </RadzenSplitterPane>
+        <RadzenSplitterPane>
+       
+                    @switch (type)
+                    {
+                        case TypeEnums.Image:
+                            <ImagePreview content="@content"/>
+                            break;
+                        case TypeEnums.Text:
+                        <TextPreview content="@content" />
+                            break;
+                            case TypeEnums.Default:
+                        <BlankPreview content="@content" />
+                            break;
+
+                    }
+            
+             
+        </RadzenSplitterPane>
+    </RadzenSplitter>
+</RadzenSplitterPane>
+</RadzenSplitter>
+
+
+<Controls directoryPath="@directoryPath" isDisabledCreateButton="@isDisabledCreateButton" isDisabledDeleteButton="@isDisabledDeleteButton" />
+<EventConsole @ref=@console/>
+
+@code {
+
+
+    EventConsole console;
+
+    TypeEnums type;
+    string content;
+    string directoryPath;
+    bool isDisabledCreateButton;
+    bool isDisabledDeleteButton;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isDisabledCreateButton = true;
+        isDisabledDeleteButton = true;
+        type = TypeEnums.Default;
+        content = string.Empty;
+        directoryPath = string.Empty;
+    }
+    async Task ContentHandler(EventCallbackArgs args)
+    {
+        console.Log($"Selected: {args.Path}");
+        type = args.Type;
+        directoryPath = args.IsDirectory ? args.Path : Path.GetDirectoryName(args.Path);
+        isDisabledCreateButton = string.IsNullOrEmpty(args.Path);
+        isDisabledDeleteButton = (string.IsNullOrEmpty(args.Path) || !(args.IsDirectory && !args.Attributes.HasFlag(FileAttributes.System)));
+
+        switch (type)
+        {
+            case TypeEnums.Image:
+                content = "data:image/png;base64, " + args.Content;
+                return;
+            case TypeEnums.Text:
+                content = args.Content;
+                return;
+                case TypeEnums.Default:
+                content = args.Content;
+                return;
+        }
+    }
+
+
+}
+

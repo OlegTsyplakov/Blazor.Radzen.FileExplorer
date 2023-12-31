@@ -1,0 +1,124 @@
+@using B.Data
+@using System.IO
+@inject IFileSystemService FileSystemService
+@inject IUpdateComponentService UpdateComponentService
+@inject NotificationService NotificationService
+
+<RadzenCard>
+    <RadzenTree Data=@entries Expand=@LoadFiles Style="width: 100%; height: 380px;" Change=@OnChange @bind-Value=@selection>
+                <RadzenTreeLevel Text=@GetTextForNode Template=@FileOrFolderTemplate />
+            </RadzenTree>
+        </RadzenCard>
+
+
+@code {
+
+    [Parameter]
+    public EventCallback<EventCallbackArgs> OnSelectValueChanged { get; set; }
+
+    IEnumerable<string> ImageTypes;
+    IEnumerable<string> TextTypes;
+    IEnumerable<string> entries;
+    EventCallbackArgs args;
+    object selection;
+
+    protected override async Task OnInitializedAsync()
+    {
+        args = new EventCallbackArgs();
+        var drivesInfoModel = await FileSystemService.GetDrivesAsync().ContinueWith(async drives => 
+        {
+            await SendNotification(drives.Result.NotificationMessage);
+            return drives.Result.DrivesInfo;
+        });
+        entries = await await FileSystemService.GetRootDirectoriesAsync(drivesInfoModel.Result).ContinueWith(async root =>
+        {
+            await SendNotification(root.Result.NotificationMessage);
+            return root.Result.RootDrivesInfo;
+        }); 
+
+        ImageTypes = Helpers.ExtensionConstraints.ImageTypes;
+        TextTypes = Helpers.ExtensionConstraints.TextTypes;
+        UpdateComponentService.UpdateRequested += UpdateComponent;
+    }
+
+    async Task  LoadFiles(TreeExpandEventArgs args)
+    {
+        var directory = args.Value as string;
+        var enumOptions = new EnumerationOptions(){IgnoreInaccessible=true,};
+        args.Children.Data = Directory.EnumerateFileSystemEntries(directory,"*",enumOptions);
+        args.Children.Text = GetTextForNode;
+        args.Children.HasChildren = (path) => Directory.Exists((string)path);
+        args.Children.Template = FileOrFolderTemplate;
+    }
+
+    string GetTextForNode(object data)
+    {
+        selection = Path.GetFileName((string)data);
+        return selection as string;
+    }
+
+    RenderFragment<RadzenTreeItem> FileOrFolderTemplate = (context) => builder =>
+    {
+        string path = context.Value as string;
+
+        bool isDirectory = Directory.Exists(path);
+        var text = string.IsNullOrEmpty(context.Text)?path:context.Text;
+
+        builder.OpenComponent<RadzenIcon>(0);
+        builder.AddAttribute(1, nameof(RadzenIcon.Icon), isDirectory ? "folder" : "insert_drive_file");
+        builder.CloseComponent();
+        builder.AddContent(3, text);
+
+    };
+
+    async Task OnChange()
+    {
+        var extension = Path.GetExtension(selection.ToString());
+        await SetEventArgs(extension);
+        await OnSelectValueChanged.InvokeAsync(args);
+
+    }
+
+    async Task SetEventArgs(string extension)
+    {
+        string path = selection.ToString();
+        DirectoryInfo directoryInfo = new DirectoryInfo(path);
+        FileAttributes fileAttributes = directoryInfo.Attributes;
+        bool isDirectory = directoryInfo.Exists;
+
+        switch (true)
+        {
+            case bool s when ImageTypes.Contains(extension):
+                args.Type = TypeEnums.Image;
+                args.Content = Helpers.ImageHelpers.ConvertFromPathToImage(path);
+                args.Path = path;
+                args.IsDirectory = false;
+                args.Attributes = fileAttributes;
+                break;
+            case bool s when TextTypes.Contains(extension):
+                args.Type = TypeEnums.Text;
+                args.Content = await Helpers.TextHelpers.ConvertPathToTextAsync(path);
+                args.Path = path;
+                args.IsDirectory = false;
+                args.Attributes = fileAttributes;
+                break;
+            default:
+                args.Content = "Not supported.";
+                args.Type = TypeEnums.Default; 
+                args.Path = path;
+                args.IsDirectory = isDirectory;
+                args.Attributes = fileAttributes;
+                break;
+        }
+
+    }
+    void UpdateComponent()
+    {
+        StateHasChanged();
+    }
+    async Task SendNotification(NotificationMessage notificationMessage)
+    {
+            NotificationService.Notify(notificationMessage);
+    }
+}
+

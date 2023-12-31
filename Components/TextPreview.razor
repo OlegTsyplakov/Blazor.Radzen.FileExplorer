@@ -1,0 +1,8 @@
+
+<RadzenStack AlignItems="AlignItems.Center" Class=" overflow-scroll h-100">
+ <RadzenText TextStyle="TextStyle.H6" TagName="TagName.P">@content</RadzenText>
+</RadzenStack>
+
+@code {
+    [Parameter] public string content { get; set; }
+}

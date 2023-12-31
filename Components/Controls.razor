@@ -1,0 +1,13 @@
+﻿
+<RadzenStack AlignItems="AlignItems.Center" Class="rz-mx-auto rz-my-12">
+<RadzenRow>
+        <CreateFolder directoryPath="@directoryPath" isDisabledCreateButton="@isDisabledCreateButton" />
+        <DeleteFolder directoryPath="@directoryPath" isDisabledDeleteButton="@isDisabledDeleteButton" />
+</RadzenRow>
+</RadzenStack>
+
+@code {
+    [Parameter] public string directoryPath { get; set; }
+    [Parameter] public bool isDisabledCreateButton { get; set; }
+    [Parameter] public bool isDisabledDeleteButton { get; set; }
+}

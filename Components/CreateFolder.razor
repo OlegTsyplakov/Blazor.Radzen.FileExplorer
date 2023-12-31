@@ -1,0 +1,23 @@
+﻿
+@inject DialogService DialogService
+
+
+<div class="rz-p-12 rz-text-align-center">
+    <RadzenButton Variant="Variant.Outlined" Click=@(args => CreateForm(@directoryPath)) Text="Create folder" ButtonStyle="ButtonStyle.Primary" Disabled=@isDisabledCreateButton />
+
+
+</div>
+
+@code {
+
+    [Parameter] public string directoryPath { get; set; }
+    [Parameter] public bool isDisabledCreateButton { get; set; }
+
+    async Task CreateForm(string path)
+    {
+
+        await DialogService.OpenAsync<CreateFolderForm>($"Create folder in {directoryPath} directory",
+               new Dictionary<string, object>() { { "directoryPath", directoryPath } },
+               new DialogOptions() { Width = "400px", Height = "300px", Resizable = true, Draggable = true });
+    }
+}

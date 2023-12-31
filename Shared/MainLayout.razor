@@ -1,0 +1,13 @@
+@inherits LayoutComponentBase
+<RadzenComponents />
+
+<RadzenLayout style="grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body';">
+
+    <RadzenBody Expanded="@sidebarExpanded">
+
+            @Body
+
+
+    </RadzenBody>
+
+</RadzenLayout>

@@ -1,0 +1,41 @@
+﻿@inject IFileSystemService FileSystemService
+@inject NotificationService NotificationService
+@inject DialogService DialogService
+@inject IUpdateComponentService UpdateComponentService
+
+<RadzenTemplateForm TItem="CreateFormModel" Data=@directory Submit=@OnSubmit>
+    <RadzenStack Gap="1rem" Class="rz-p-sm-12">
+        <RadzenFormField Text="Enter new directory name" Variant="@Variant.Outlined">
+            <ChildContent>
+                <RadzenTextBox Name="Name" @bind-Value=@directory.DirectoryName />
+            </ChildContent>
+            <Helper>
+                <RadzenRegexValidator Component="Name" Text="Enter valid directory name." Pattern="^[a-zA-Z0-9]+$" />
+            </Helper>
+        </RadzenFormField>
+        <RadzenButton ButtonType="ButtonType.Submit" Text="Create"></RadzenButton>
+    </RadzenStack>
+</RadzenTemplateForm>
+
+@code {
+
+    [Parameter] public string directoryPath { get; set; }
+
+    CreateFormModel directory;
+
+    protected override async Task OnInitializedAsync()
+    {
+        directory = new();
+    }
+
+
+    async Task OnSubmit(CreateFormModel directory)
+    {
+        var dirPath = Path.Combine(directoryPath, directory.DirectoryName);
+        NotificationMessage notificationMessage = await FileSystemService.CreateDirectory(dirPath);
+        NotificationService.Notify(notificationMessage);
+        DialogService.Close();
+        UpdateComponentService.RequestUpdate();
+    }
+
+}
