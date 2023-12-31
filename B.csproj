@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Components\TextPreview.razor.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Radzen.Blazor" Version="*" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
