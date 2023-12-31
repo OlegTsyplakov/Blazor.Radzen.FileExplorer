@@ -7,8 +7,8 @@
 <RadzenCard>
     <RadzenTree Data=@entries Expand=@LoadFiles Style="width: 100%; height: 380px;" Change=@OnChange @bind-Value=@selection>
                 <RadzenTreeLevel Text=@GetTextForNode Template=@FileOrFolderTemplate />
-            </RadzenTree>
-        </RadzenCard>
+    </RadzenTree>
+ </RadzenCard>
 
 
 @code {
@@ -76,7 +76,6 @@
         var extension = Path.GetExtension(selection.ToString());
         await SetEventArgs(extension);
         await OnSelectValueChanged.InvokeAsync(args);
-
     }
 
     async Task SetEventArgs(string extension)
@@ -112,13 +111,10 @@
         }
 
     }
-    void UpdateComponent()
-    {
-        StateHasChanged();
-    }
-    async Task SendNotification(NotificationMessage notificationMessage)
-    {
-            NotificationService.Notify(notificationMessage);
-    }
+
+    void UpdateComponent() => StateHasChanged();
+
+    async Task SendNotification(NotificationMessage notificationMessage) => NotificationService.Notify(notificationMessage);
+
 }
 

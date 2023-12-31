@@ -99,13 +99,13 @@ namespace B.Services
                     Directory.Delete(path);
                     DirectoryInfo directoryInfo = new (path);
                     message.Severity = NotificationSeverity.Info;
-                    message.Summary = "Directory delelete:";
+                    message.Summary = "Directory delete:";
                     message.Detail = "Directory is deleted.";
                  
                     return Task.FromResult(message);
                 }
                 message.Severity = NotificationSeverity.Info;
-                message.Summary = "Directory delelete:";
+                message.Summary = "Directory delete:";
                 message.Detail = $"Directory {path} does't exists.";
                 return Task.FromResult(message);
             }
