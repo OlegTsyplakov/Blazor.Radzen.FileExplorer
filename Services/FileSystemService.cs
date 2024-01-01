@@ -63,7 +63,7 @@ namespace B.Services
             }
 
         }
-        public Task<NotificationMessage> CreateDirectory(string path)
+        public Task<NotificationMessage> CreateDirectoryAsync(string path)
         {
             NotificationMessage message = new ();
             try
@@ -89,7 +89,7 @@ namespace B.Services
                 return Task.FromResult(message);
             }
         }
-        public Task<NotificationMessage> DeleteDirectory(string path)
+        public Task<NotificationMessage> DeleteDirectoryAsync(string path)
         {
             NotificationMessage message = new();
             try

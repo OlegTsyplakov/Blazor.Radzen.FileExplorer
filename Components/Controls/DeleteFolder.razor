@@ -20,7 +20,7 @@
         var confirmationResult = await this.DialogService.Confirm("Are you sure?", $"Delete folder {directoryPath}", new ConfirmOptions { OkButtonText = "Yes", CancelButtonText = "No" });
         if (confirmationResult.HasValue && confirmationResult.Value)
         {
-            NotificationMessage notificationMessage = await FileSystemService.DeleteDirectory(path);
+            NotificationMessage notificationMessage = await FileSystemService.DeleteDirectoryAsync(path);
             NotificationService.Notify(notificationMessage);
             UpdateComponentService.RequestUpdate();
         }

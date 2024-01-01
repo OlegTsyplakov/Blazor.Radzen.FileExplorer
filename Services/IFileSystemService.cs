@@ -7,7 +7,7 @@ namespace B.Services
     {
         Task<DrivesInfoModel> GetDrivesAsync();
         Task<RootDrivesInfoModel> GetRootDirectoriesAsync(IEnumerable<DriveInfo> drives);
-        Task<NotificationMessage> CreateDirectory(string path);
-        Task<NotificationMessage> DeleteDirectory(string path);
+        Task<NotificationMessage> CreateDirectoryAsync(string path);
+        Task<NotificationMessage> DeleteDirectoryAsync(string path);
     }
 }

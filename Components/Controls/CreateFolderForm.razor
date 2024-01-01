@@ -33,7 +33,7 @@
     async Task OnSubmit(CreateFormModel directory)
     {
         var dirPath = Path.Combine(directoryPath, directory.DirectoryName);
-        NotificationMessage notificationMessage = await FileSystemService.CreateDirectory(dirPath);
+        NotificationMessage notificationMessage = await FileSystemService.CreateDirectoryAsync(dirPath);
         NotificationService.Notify(notificationMessage);
         DialogService.Close();
         UpdateComponentService.RequestUpdate();
