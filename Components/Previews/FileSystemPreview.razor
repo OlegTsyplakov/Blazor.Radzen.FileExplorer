@@ -89,7 +89,7 @@
         {
             case bool s when ImageTypes.Contains(extension):
                 args.Type = TypeEnums.Image;
-                args.Content = Helpers.ImageHelpers.ConvertFromPathToImage(path);
+                args.Content = await Helpers.ImageHelpers.ConvertFromPathToImageAsync(path);
                 args.Path = path;
                 args.IsDirectory = false;
                 args.Attributes = fileAttributes;

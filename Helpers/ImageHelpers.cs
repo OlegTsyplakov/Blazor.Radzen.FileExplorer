@@ -3,18 +3,18 @@ using System.Drawing;
 namespace B.Helpers{
 
 
-public class ImageHelpers{
-
-    public static string ConvertFromPathToImage(string path)
+public class ImageHelpers
     {
-            using Image image = Image.FromFile(path);
-            using MemoryStream m = new();
-            image.Save(m, image.RawFormat);
-            byte[] imageBytes = m.ToArray();
+        public static async Task<string> ConvertFromPathToImageAsync(string path)
+        {
+            byte[] imageBytes = await File.ReadAllBytesAsync(path);
 
-            string base64String = Convert.ToBase64String(imageBytes);
-            return base64String;
+            if (imageBytes is not null) 
+            {
+                return Convert.ToBase64String(imageBytes);
+            }
+            return string.Empty;
         }
-}
+    }
 
 }
