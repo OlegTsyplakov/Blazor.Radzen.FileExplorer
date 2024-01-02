@@ -1,5 +1,3 @@
-using System.Drawing;
-
 namespace B.Helpers{
 
 
@@ -9,11 +7,11 @@ public class ImageHelpers
         {
             byte[] imageBytes = await File.ReadAllBytesAsync(path);
 
-            if (imageBytes is not null) 
+            if (imageBytes is null) 
             {
-                return Convert.ToBase64String(imageBytes);
+                return string.Empty;
             }
-            return string.Empty;
+            return Convert.ToBase64String(imageBytes);      
         }
     }
 
