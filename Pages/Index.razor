@@ -11,15 +11,15 @@
         </RadzenSplitterPane>
         <RadzenSplitterPane>
        
-                    @switch (type)
+                    @switch (extensionType)
                     {
-                        case TypeEnums.Image:
+                    case ExtensionTypeEnums.Image:
                             <ImagePreview content="@content"/>
                             break;
-                        case TypeEnums.Text:
+                    case ExtensionTypeEnums.Text:
                         <TextPreview content="@content" />
                             break;
-                            case TypeEnums.Default:
+                    case ExtensionTypeEnums.Default:
                         <BlankPreview content="@content" />
                             break;
 
@@ -40,7 +40,7 @@
 
     EventConsole console;
 
-    TypeEnums type;
+    ExtensionTypeEnums extensionType;
     string content;
     string directoryPath;
     bool isDisabledCreateButton;
@@ -50,27 +50,27 @@
     {
         isDisabledCreateButton = true;
         isDisabledDeleteButton = true;
-        type = TypeEnums.Default;
+        extensionType = ExtensionTypeEnums.Default;
         content = string.Empty;
         directoryPath = string.Empty;
     }
     async Task ContentHandler(EventCallbackArgs args)
     {
         console.Log($"Selected: {args.Path}");
-        type = args.Type;
+        extensionType = args.ExtensionType;
         directoryPath = args.IsDirectory ? args.Path : Path.GetDirectoryName(args.Path);
         isDisabledCreateButton = string.IsNullOrEmpty(args.Path);
         isDisabledDeleteButton = (string.IsNullOrEmpty(args.Path) || !(args.IsDirectory && !args.Attributes.HasFlag(FileAttributes.System)));
 
-        switch (type)
+        switch (extensionType)
         {
-            case TypeEnums.Image:
+            case ExtensionTypeEnums.Image:
                 content = "data:image/png;base64, " + args.Content;
                 return;
-            case TypeEnums.Text:
+            case ExtensionTypeEnums.Text:
                 content = args.Content;
                 return;
-                case TypeEnums.Default:
+            case ExtensionTypeEnums.Default:
                 content = args.Content;
                 return;
         }

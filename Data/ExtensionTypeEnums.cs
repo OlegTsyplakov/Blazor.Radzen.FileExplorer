@@ -1,6 +1,6 @@
 ﻿namespace B.Data
 {
-    public enum TypeEnums
+    public enum ExtensionTypeEnums
     {
         Image,
         Text,

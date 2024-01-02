@@ -1,4 +1,6 @@
-﻿namespace B.Services
+﻿using B.Services.Interfaces;
+
+namespace B.Services
 {
     public class UpdateComponentService : IUpdateComponentService
     {

@@ -2,7 +2,7 @@ namespace B.Data
 {
     public class EventCallbackArgs
     {
-        public TypeEnums Type { get; set; }
+        public ExtensionTypeEnums ExtensionType { get; set; }
         public string Path { get; set; }
         public string Content { get; set; }
         public bool IsDirectory { get; set; }

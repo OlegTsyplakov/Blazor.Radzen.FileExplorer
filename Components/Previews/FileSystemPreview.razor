@@ -88,14 +88,14 @@
         switch (true)
         {
             case bool s when ImageTypes.Contains(extension):
-                args.Type = TypeEnums.Image;
+                args.ExtensionType = ExtensionTypeEnums.Image;
                 args.Content = await Helpers.ImageHelpers.ConvertFromPathToImageAsync(path);
                 args.Path = path;
                 args.IsDirectory = false;
                 args.Attributes = fileAttributes;
                 break;
             case bool s when TextTypes.Contains(extension):
-                args.Type = TypeEnums.Text;
+                args.ExtensionType = ExtensionTypeEnums.Text;
                 args.Content = await Helpers.TextHelpers.ConvertPathToTextAsync(path);
                 args.Path = path;
                 args.IsDirectory = false;
@@ -103,7 +103,7 @@
                 break;
             default:
                 args.Content = "Not supported.";
-                args.Type = TypeEnums.Default; 
+                args.ExtensionType = ExtensionTypeEnums.Default;
                 args.Path = path;
                 args.IsDirectory = isDirectory;
                 args.Attributes = fileAttributes;

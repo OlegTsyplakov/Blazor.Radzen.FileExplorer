@@ -1,4 +1,5 @@
 using B.Services;
+using B.Services.Interfaces;
 using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,4 +1,4 @@
-﻿namespace B.Services
+﻿namespace B.Services.Interfaces
 {
     public interface IUpdateComponentService
     {
